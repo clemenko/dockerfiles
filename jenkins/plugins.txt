@@ -1,0 +1,15 @@
+pipeline-milestone-step:latest
+pipeline-model-api:latest
+pipeline-model-definition:latest
+pipeline-githubnotify-step:latest
+pipeline-github-lib:latest
+pipeline-rest-api:latest
+pipeline-stage-step:latest
+pipeline-stage-tags-metadata:latest
+pipeline-stage-view:latest
+pipeline-utility-steps:latest
+docker-plugin:latest
+job-dsl:latest
+github:latest
+configuration-as-code:latest
+configuration-as-code-groovy:latest
