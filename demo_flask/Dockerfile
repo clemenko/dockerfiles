@@ -19,6 +19,7 @@ RUN apk -U upgrade && apk add --no-cache curl py-pip  &&\
     pip install --no-cache-dir --upgrade pip &&\
     pip install --no-cache-dir flask redis pymongo &&\
     rm -rf /var/cache/apk/*
+    
 WORKDIR /code
 ADD . /code
 EXPOSE 5000
