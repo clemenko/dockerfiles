@@ -1,19 +1,14 @@
 FROM alpine
 
 ARG BUILD_DATE
-ARG VCS_REF
 ARG BUILD_VERSION
-ARG JAR_FILE
 
-# Labels.
-LABEL maintainer="clemenko@docker.com" \
-      org.label-schema.vcs-url="https://github.com/clemenko/dockerfiles/tree/master/demo_flask" \
-      org.label-schema.schema-version="1.0" \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.name="clemenko/flask_demo" \
-      org.label-schema.description="The repository contains a simple flask application " \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.version=$BUILD_VERSION
+LABEL org.opencontainers.image.authors="clemenko@docker.com" \
+      org.opencontainers.image.source="https://github.com/clemenko/dockerfiles/tree/master/demo_flask" \
+      org.opencontainers.image.created=$BUILD_DATE \
+      org.opencontainers.image.title="clemenko/flask_demo" \
+      org.opencontainers.image.description="The repository contains a simple flask application " \
+      org.opencontainers.image.source=$BUILD_VERSION
 
 RUN apk -U upgrade && apk add --no-cache curl py-pip  &&\
     pip install --no-cache-dir --upgrade pip &&\
