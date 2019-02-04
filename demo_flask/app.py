@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from redis import Redis
 from pymongo import MongoClient
+from werkzeug.contrib.fixers import ProxyFix
 
 import os
 
@@ -43,18 +44,18 @@ def info(server_name=None):
     server_name = os.getenv('HOSTNAME')
     return server_name + ' : 0.1', 200
 
-@app.route('/headers')
+@app.route('/headers', methods=["GET"])
 def headers():
-    print request.__dict__
-    return 'printed to log', 200
+    return jsonify({'ip': request.headers}), 200
 
 @app.route("/get_my_ip", methods=["GET"])
 def get_my_ip():
-    print jsonify({'ip': request.headers.get('X-Forwarded-For', '')}), 200
-    print request.headers.get("X-Forwarded-Host")
-    print request.remote_addr
-    return jsonify({'ip': request.headers.getlist("X-Forwarded-For")})
-    #X-Real-IP
+    if request.headers.getlist("X-Forwarded-For"):
+      ip = request.headers.getlist("X-Forwarded-For")[0]
+    else:
+      ip = request.remote_addr
+
+    return ip, 200
 
 @app.route('/list')
 def listip():
@@ -65,7 +66,7 @@ def listip():
 
 @app.route('/secret')
 def secret():
-    return red_secret
+    return red_secret, 200
 
 @app.route('/')
 def index(server_name=None):
@@ -76,6 +77,8 @@ def index(server_name=None):
     }
     db.ipdb.insert_one(item_doc)
     return render_template('index.html', hits=redis.get('hits'), server_name=server_name, ip=request.remote_addr, secret=red_secret)
+
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 if __name__ == '__main__':
     health_on()
