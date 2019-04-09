@@ -10,9 +10,9 @@ LABEL org.opencontainers.image.authors="clemenko@docker.com" \
       org.opencontainers.image.description="The repository contains a simple flask application " \
       org.opencontainers.image.source=$BUILD_VERSION
 
-RUN apk -U upgrade && apk add --no-cache curl py-pip  &&\
-    pip install --no-cache-dir --upgrade pip &&\
-    pip install --no-cache-dir flask redis pymongo &&\
+RUN apk -U upgrade && apk add --no-cache python3 curl  &&\
+    pip3 install --no-cache-dir --upgrade pip &&\
+    pip3 install --no-cache-dir flask redis pymongo &&\
     rm -rf /var/cache/apk/*
     
 WORKDIR /code
