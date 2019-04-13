@@ -45,15 +45,15 @@ def info(server_name=None):
 
 @app.route('/headers')
 def headers():
-    print request.__dict__
+    print(request.__dict__)
     return 'printed to log', 200
 
 @app.route("/get_my_ip", methods=["GET"])
 def get_my_ip():
-    print jsonify({'ip': request.headers.get('X-Forwarded-For', '')}), 200
-    print request.headers.get("X-Forwarded-Host")
-    print request.remote_addr
-    return jsonify({'ip': request.headers.getlist("X-Forwarded-For")})
+    print(jsonify({'ip': request.headers.get('X-Forwarded-For', '')}), 200)
+    print(request.headers.get("X-Forwarded-Host"))
+    print(request.remote_addr)
+    return jsonify({'ip': request.headers.getlist("X-Forwarded-For")}), 500
     #X-Real-IP
 
 @app.route('/list')
