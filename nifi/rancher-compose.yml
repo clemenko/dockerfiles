@@ -1,4 +1,0 @@
-nifi-master:
-  scale: 1
-nifi-node:
-  scale: 1
