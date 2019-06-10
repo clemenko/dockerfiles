@@ -4,10 +4,11 @@ from pymongo import MongoClient
 
 import os
 
+version = "0.1"
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 redis = Redis(host='redis', port=6379)
 server_name = os.getenv('HOSTNAME')
-server_health_key = '{0}_health'.format(server_name)
 
 if os.path.isfile('/run/secrets/demo_title'):
    open('/run/secrets/demo_title', 'r')
@@ -20,36 +21,25 @@ else:
 client = MongoClient('mongo')
 db = client.ipdb
 
-@app.route('/health/on')
-def health_on():
-    redis.set(server_health_key, 'on')
-    return 'Health key {0} set to on!'.format(server_health_key)
-
-@app.route('/health/off')
-def health_off():
-    redis.set(server_health_key, 'off')
-    return 'Health key {0} set to off!'.format(server_health_key)
-
 @app.route('/healthz')
 def health_check():
-    health = redis.get(server_health_key)
-    if health == 'on':
-        return jsonify({'redis': 'up', 'mongo': 'up'}), 200
-    else:
-        return jsonify({'redis': 'down', 'mongo': 'down'}), 500
+    return jsonify({'redis': 'up', 'mongo': 'up'}), 200
 
 @app.route('/info')
 def info(server_name=None):
-    server_name = os.getenv('HOSTNAME')
-    return server_name + ' : 0.1', 200
+    redis.incr('hits')
+    #return os.getenv('HOSTNAME') + " : " +  str(redis.get('hits').decode('utf-8')) + " : " + version, 200
+    return jsonify(os.getenv('HOSTNAME'),redis.get('hits').decode('utf-8'),version), 200
 
 @app.route('/headers')
 def headers():
+    redis.incr('hits')
     print(request.__dict__)
     return 'printed to log', 200
 
 @app.route("/get_my_ip", methods=["GET"])
 def get_my_ip():
+    redis.incr('hits')
     print(jsonify({'ip': request.headers.get('X-Forwarded-For', '')}), 200)
     print(request.headers.get("X-Forwarded-Host"))
     print(request.remote_addr)
@@ -58,14 +48,23 @@ def get_my_ip():
 
 @app.route('/list')
 def listip():
-    server_name = os.getenv('HOSTNAME')
-    _items = db.ipdb.find()
-    items = [item for item in _items]
-    return render_template('list.html', items=items, hits=redis.get('hits'), server_name=server_name)
+    redis.incr('hits')
+    results = []
+    for ip in db.ipdb.find():
+        ip.pop('_id')
+        results.append(ip)
+    return jsonify(results)
+
 
 @app.route('/secret')
 def secret():
+    redis.incr('hits')
     return red_secret
+
+@app.route('/hits')
+def hits():
+    redis.incr('hits')
+    return redis.get('hits')
 
 @app.route('/')
 def index(server_name=None):
@@ -75,8 +74,7 @@ def index(server_name=None):
         'ip': request.remote_addr
     }
     db.ipdb.insert_one(item_doc)
-    return render_template('index.html', hits=redis.get('hits'), server_name=server_name, ip=request.remote_addr, secret=red_secret)
+    return render_template('index.html', hits=redis.get('hits').decode('utf-8'), server_name=server_name, ip=request.remote_addr, secret=red_secret)
 
 if __name__ == '__main__':
-    health_on()
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',debug=True)
