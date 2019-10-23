@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 import os
 
-version = "0.1"
+version = "0.2"
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 redis = Redis(host='redis', port=6379)
