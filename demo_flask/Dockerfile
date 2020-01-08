@@ -14,6 +14,7 @@ LABEL org.opencontainers.image.authors="clemenko@docker.com" \
 RUN apk -U upgrade && apk add --no-cache python3 curl  &&\
     pip3 install --no-cache-dir --upgrade pip &&\
     pip3 install --no-cache-dir flask redis pymongo &&\
+    apk --purge del apk-tools &&\
     rm -rf /var/cache/apk/*
     
 WORKDIR /code
