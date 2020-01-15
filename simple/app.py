@@ -20,6 +20,11 @@ def health_check():
     else:
         return jsonify({'redis': 'down', 'mongo': 'down'}), 500
 
+@app.route('/info')
+def info(server_name=None):
+    redis.incr('hits')
+    return jsonify(os.getenv('HOSTNAME'),redis.get('hits').decode('utf-8'),version), 200
+
 @app.route('/version')
 def version():
     return '2.0', 200
