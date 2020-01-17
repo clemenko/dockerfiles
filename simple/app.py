@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 
 import os
 
+version = "0.1"
 app = Flask(__name__)
 server_name = os.getenv('SRV_NAME')
 
@@ -15,15 +16,11 @@ else:
 
 @app.route('/healthz')
 def health_check():
-    if health == 'on':
-        return jsonify({'redis': 'up', 'mongo': 'up'}), 200
-    else:
-        return jsonify({'redis': 'down', 'mongo': 'down'}), 500
+    return jsonify({'redis': 'up', 'mongo': 'up'}), 200
 
 @app.route('/info')
 def info(server_name=None):
-    redis.incr('hits')
-    return jsonify(os.getenv('HOSTNAME'),redis.get('hits').decode('utf-8'),version), 200
+    return jsonify({'hostname': os.getenv('HOSTNAME'), 'version': version}), 200
 
 @app.route('/version')
 def version():
@@ -43,4 +40,4 @@ def index(server_name=None):
     return render_template('index.html', server_name=server_name, ip=request.remote_addr, secret=red_secret)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',debug=True)
