@@ -1,6 +1,6 @@
 FROM alpine
 
-LABEL org.opencontainers.image.authors="clemenko@gmail.com" \
+LABEL org.opencontainers.image.authors="clemenko@docker.com" \
       org.opencontainers.image.source="https://github.com/clemenko/dockerfiles/tree/master/gpg" \
       org.opencontainers.image.title="clemenko/gpg" 
 

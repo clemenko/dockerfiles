@@ -3,7 +3,7 @@ FROM alpine
 ARG BUILD_DATE
 ARG BUILD_VERSION
 
-LABEL org.opencontainers.image.authors="clemenko@gmail.com" \
+LABEL org.opencontainers.image.authors="clemenko@docker.com" \
       org.opencontainers.image.source="https://github.com/clemenko/dockerfiles/tree/master/demo_flask" \
       org.opencontainers.image.created=$BUILD_DATE \
       org.opencontainers.image.title="clemenko/flask_demo" \

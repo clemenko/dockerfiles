@@ -20,7 +20,7 @@
     <h2>There have been {{hits}} hits.</h2>
     <h2>server : {{ server_name }} <br>
       Your ip : {{ ip }}</h2>
-    <p>Contact me at : <a href="mailto:clemenko@gmail.com">clemenko@gmail.com</a>.</p>
+    <p>Contact me at : <a href="mailto:clemenko@docker.com">clemenko@docker.com</a>.</p>
 
     <br><br><br>
     <h2> Commands : <h3><br>

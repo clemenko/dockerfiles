@@ -5,7 +5,7 @@ COPY gen_token.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gen_token .
 
 FROM alpine:latest
-MAINTAINER clemenko@gmail.com
+MAINTAINER clemenko@docker.com
 LABEL RUN="docker run --rm -it -v ${PATH_TO_LIC_AND_OUTPUT_DIR}:/data/ clemenko/docker_scanning_database"
 WORKDIR /
 RUN apk -U upgrade && apk add --no-cache jq curl
