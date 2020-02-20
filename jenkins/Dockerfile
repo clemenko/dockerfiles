@@ -18,6 +18,7 @@ LABEL org.opencontainers.image.authors="clemenko@gmail.com" \
 USER root
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY jenkins.yaml /usr/share/jenkins/casc/
+
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
 ENV CASC_JENKINS_CONFIG=/usr/share/jenkins/casc/
 
