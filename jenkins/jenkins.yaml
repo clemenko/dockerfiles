@@ -1,0 +1,89 @@
+jenkins:
+  systemMessage: "Jenkins demo environment\n\n"
+  numExecutors: 5
+  scmCheckoutRetryCount: 2
+  mode: NORMAL
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: ROX_API_TOKEN
+            value: REPLACEME
+          - key: PORTAL_ADDRESS
+            value: https://central.stackrox
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+  clouds:
+    - docker:
+        name: "docker"
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
+        templates:
+          - labelString: "docker-agent"
+            dockerTemplateBase:
+              image: "jenkins/slave"
+              volumes:
+                - hello:/hello
+                - world:/world
+              environmentsString: |
+                hello=world
+                foo=bar
+            remoteFs: "/home/jenkins/agent"
+            connector:
+              attach:
+                user: "jenkins"
+            instanceCapStr: "10"
+tool:
+  git:
+    installations:
+      - name: git
+        home: /usr/local/bin/git
+groovy:
+  - script: >
+      import jenkins.model.*;
+      import hudson.security.*;
+      import jenkins.security.s2m.AdminWhitelistRule;
+      def instance = Jenkins.getInstance();
+      def hudsonRealm = new HudsonPrivateSecurityRealm(false);
+      hudsonRealm.createAccount("admin", "Pa22word");
+      instance.setSecurityRealm(hudsonRealm);
+      Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false);
+jobs:
+  - script: >
+      pipelineJob('StackRox_PluginSample') {
+        definition {
+          cps {
+            script("""\
+              pipeline {
+                agent any
+                stages {
+                  stage('Pseudo-build') {
+                    steps {
+                      sh "mkdir \$BUILD_TAG"
+                      sh "echo 'library/nginx:latest' >> \$BUILD_TAG/rox_images_to_scan"
+                      sh "echo 'neilcar/jenkins-demo:latest' >> \$BUILD_TAG/rox_images_to_scan"
+                    }
+                  }
+                  stage('Stackrox Plugin Scan') {
+                      steps {
+                              step ([
+                                \$class: 'StackroxBuilder', 
+                                portalAddress: "\$PORTAL_ADDRESS",
+                                apiToken: "\$ROX_API_TOKEN",
+                                enableTLSVerification: false,
+                                caCertPEM: '',
+                                failOnCriticalPluginError: true,
+                                failOnPolicyEvalFailure: true
+                              ])
+                      }
+                  }
+                }
+              }""".stripIndent())
+              sandbox()
+          }
+        }
+      }
