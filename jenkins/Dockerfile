@@ -18,6 +18,7 @@ LABEL org.opencontainers.image.authors="clemenko@gmail.com" \
 USER root
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY jenkins.yaml /usr/share/jenkins/casc/
+COPY --from=build /usr/bin/docker /usr/bin/
 
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
 ENV CASC_JENKINS_CONFIG=/usr/share/jenkins/casc/
@@ -27,4 +28,3 @@ RUN apk -U add libltdl && \
     /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt && \
     rm -rf /var/cache/apk/*
 
-COPY --from=build /usr/bin/docker /usr/bin/
