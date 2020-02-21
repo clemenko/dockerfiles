@@ -64,9 +64,8 @@ jobs:
                   stage('Pseudo-build') {
                     steps {
                       sh "mkdir \$BUILD_TAG"
-                      sh "echo 'library/nginx:latest' >> \$BUILD_TAG/rox_images_to_scan"
-                      sh "echo 'library/alpine:latest' >> \$BUILD_TAG/rox_images_to_scan"
-                      sh "echo 'neilcar/jenkins-demo:latest' >> \$BUILD_TAG/rox_images_to_scan"
+                      sh "echo 'library/alpine' >> \$BUILD_TAG/rox_images_to_scan"
+                      sh "echo 'clemenko/jenkins' >> \$BUILD_TAG/rox_images_to_scan"
                     }
                   }
                   stage('Stackrox Plugin Scan') {
