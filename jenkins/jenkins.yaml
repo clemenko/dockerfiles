@@ -8,7 +8,7 @@ jenkins:
         env:
           - key: ROX_API_TOKEN
             value: REPLACEME
-          - key: PORTAL_ADDRESS
+          - key: ROX_URL
             value: https://central.stackrox
   authorizationStrategy:
     loggedInUsersCanDoAnything:
@@ -72,7 +72,7 @@ jobs:
                       steps {
                               step ([
                                 \$class: 'StackroxBuilder', 
-                                portalAddress: "\$PORTAL_ADDRESS",
+                                portalAddress: "\$ROX_URL",
                                 apiToken: "\$ROX_API_TOKEN",
                                 enableTLSVerification: false,
                                 caCertPEM: '',
