@@ -1,6 +1,6 @@
 jenkins:
   systemMessage: "Jenkins demo environment\n\n"
-  numExecutors: 5
+  numExecutors: 3
   scmCheckoutRetryCount: 2
   mode: NORMAL
   globalNodeProperties:
