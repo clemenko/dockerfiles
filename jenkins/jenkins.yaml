@@ -68,6 +68,12 @@ jobs:
                       sh "echo 'clemenko/jenkins' >> \$BUILD_TAG/rox_images_to_scan"
                     }
                   }
+                  stage('Pseudo-Push') {
+                    steps {
+                      sh "echo 'docker push library/alpine' "
+                      sh "echo 'docker push clemenko/jenkins' "
+                    }
+                  }
                   stage('Stackrox Plugin Scan') {
                       steps {
                               step ([
