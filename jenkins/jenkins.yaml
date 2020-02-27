@@ -61,14 +61,14 @@ jobs:
               pipeline {
                 agent any
                 stages {
-                  stage('Pseudo-build') {
+                  stage('Build') {
                     steps {
                       sh "mkdir \$BUILD_TAG"
                       sh "echo 'library/alpine' >> \$BUILD_TAG/rox_images_to_scan"
                       sh "echo 'clemenko/jenkins' >> \$BUILD_TAG/rox_images_to_scan"
                     }
                   }
-                  stage('Pseudo-Push') {
+                  stage('Push') {
                     steps {
                       sh "echo 'docker push library/alpine' "
                       sh "echo 'docker push clemenko/jenkins' "
