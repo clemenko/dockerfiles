@@ -1,6 +1,3 @@
-ace-editor:latest
-ant:latest
-antisamy-markup-formatter:latest
 pipeline-milestone-step:latest
 pipeline-model-api:latest
 pipeline-model-declarative-agent:latest
