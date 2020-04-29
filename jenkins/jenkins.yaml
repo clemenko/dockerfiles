@@ -68,7 +68,7 @@ jobs:
                       sh "echo 'clemenko/jenkins' >> \$BUILD_TAG/rox_images_to_scan"
                     }
                   }
-                  stage('Push') {
+                  stage('Push to Dev') {
                     steps {
                       sh "echo 'docker push library/alpine' "
                       sh "echo 'docker push clemenko/jenkins' "
@@ -86,6 +86,12 @@ jobs:
                                 failOnPolicyEvalFailure: true
                               ])
                       }
+                  }
+                  stage('Push to Prod') {
+                    steps {
+                      sh "echo 'docker push library/alpine' "
+                      sh "echo 'docker push clemenko/jenkins' "
+                    }
                   }
                 }
               }""".stripIndent())
