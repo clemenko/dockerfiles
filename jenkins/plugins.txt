@@ -11,6 +11,7 @@ pipeline-stage-view:latest
 pipeline-utility-steps:latest
 docker-plugin:latest
 job-dsl:latest
+github:latest
 configuration-as-code:latest
 configuration-as-code-groovy:latest
 stackrox-container-image-scanner:latest

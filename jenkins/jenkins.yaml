@@ -8,6 +8,8 @@ jenkins:
         env:
           - key: ROX_API_TOKEN
             value: REPLACEME
+          - key: HUB_PASSWORD
+            value: REPLACEME
           - key: ROX_URL
             value: https://central.stackrox
   authorizationStrategy:
@@ -36,12 +38,12 @@ jenkins:
             connector:
               attach:
                 user: "jenkins"
-            instanceCapStr: "10"
+            instanceCapStr: "3"
 tool:
   git:
     installations:
       - name: git
-        home: /usr/local/bin/git
+        home: /usr/bin/git
 groovy:
   - script: >
       import jenkins.model.*;
