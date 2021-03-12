@@ -23,7 +23,7 @@ COPY --from=build /usr/bin/docker /usr/bin/
 ENV JAVA_OPTS "-Djenkins.install.runSetupWizard=false ${JAVA_OPTS:-}"
 ENV CASC_JENKINS_CONFIG=/usr/share/jenkins/casc/
 
-RUN apk -U update; apk add libltdl git && \
+RUN apk -U update; apk add libltdl git jq && \
     apk --purge del apk-tools && \
     /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt && \
     rm -rf /var/cache/apk/*

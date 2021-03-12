@@ -11,7 +11,7 @@ jenkins:
           - key: HUB_PASSWORD
             value: REPLACEME
           - key: ROX_URL
-            value: https://central.stackrox
+            value: https://central.stackrox:443
   authorizationStrategy:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
@@ -56,7 +56,7 @@ groovy:
       Jenkins.instance.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false);
 jobs:
   - script: >
-      pipelineJob('StackRox_PluginSample') {
+      pipelineJob('StackRox_Sample') {
         definition {
           cps {
             script("""\
@@ -76,24 +76,27 @@ jobs:
                       sh "echo 'docker push clemenko/jenkins' "
                     }
                   }
-                  stage('Stackrox Plugin Scan') {
-                      steps {
-                              step ([
-                                \$class: 'StackroxBuilder', 
-                                portalAddress: "\$ROX_URL",
-                                apiToken: "\$ROX_API_TOKEN",
-                                enableTLSVerification: false,
-                                caCertPEM: '',
-                                failOnCriticalPluginError: true,
-                                failOnPolicyEvalFailure: true
-                              ])
-                      }
+                  stage('Roxctl Image Scan') {
+                    steps {
+                      sh 'curl -k -L -H "Authorization: Bearer \$ROX_API_TOKEN" \$ROX_URL/api/cli/download/roxctl-linux --output ./roxctl && chmod +x ./roxctl'
+                      sh "./roxctl --insecure-skip-tls-verify image scan -e \$ROX_URL --image clemenko/jenkins > jenkins.latest.scan.json"
+                      sh 'echo \\'[\"CVE\", \"CVSS Score\", \"Summary\", \"Component\", \"Version\", \"Fixed By\", \"Layer Index\", \"Layer Instruction\"], (.metadata.v1.layers as \$layers | .scan.components | sort_by(.layerIndex, .name) | .[] | . as \$component | select(.vulns != null) | .vulns[] | [.cve, .cvss, .summary, \$component.name, \$component.version, .fixedBy, \$component.layerIndex, (\$layers[\$component.layerIndex].instruction + \" \" +\$layers[\$component.layerIndex].value)]) | @csv\\' > layers_query'
+                      sh 'jq -r  -f layers_query jenkins.latest.scan.json > jenkins_vuln_layers.csv'
+                      sh "./roxctl --insecure-skip-tls-verify image check -e \$ROX_URL --image clemenko/jenkins > jenkins.latest.check.txt"
+                    }
                   }
                   stage('Push to Prod') {
                     steps {
                       sh "echo 'docker push library/alpine' "
                       sh "echo 'docker push clemenko/jenkins' "
                     }
+                  }
+                }
+                post {
+                  always {
+                    archiveArtifacts artifacts: '*.json', fingerprint: true
+                    archiveArtifacts artifacts: '*.txt', fingerprint: true
+                    archiveArtifacts artifacts: '*.csv', fingerprint: true
                   }
                 }
               }""".stripIndent())
