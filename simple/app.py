@@ -16,7 +16,7 @@ else:
 
 @app.route('/healthz')
 def health_check():
-    return jsonify({'redis': 'up', 'mongo': 'up'}), 200
+    return jsonify({'redis': 'up'}), 200
 
 @app.route('/info')
 def info(server_name=None):

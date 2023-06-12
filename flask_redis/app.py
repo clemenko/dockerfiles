@@ -3,7 +3,7 @@ from redis import Redis
 
 import os
 
-version = "0.1"
+version = "0.2"
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 redis = Redis(host='redis', port=6379)
@@ -12,7 +12,7 @@ server_name = os.getenv('HOSTNAME')
 
 @app.route('/healthz')
 def health_check():
-    return jsonify({'redis': 'up', 'mongo': 'up', 'storage': 'up'}), 200
+    return jsonify({'redis': 'up', 'storage': 'up'}), 200
 
 @app.route('/hits')
 def hits():
