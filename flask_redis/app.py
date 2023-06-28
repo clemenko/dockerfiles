@@ -26,4 +26,4 @@ def index(server_name=None):
     return render_template('index.html', hits=redis.get('hits').decode('utf-8'), server_name=server_name)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=true)
+    app.run(host='0.0.0.0',debug=True)
