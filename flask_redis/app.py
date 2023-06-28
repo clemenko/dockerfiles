@@ -6,7 +6,7 @@ import os
 version = "0.2"
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
-redis = Redis(host='redis', port=6379)
+redis = Redis(host='redisZ', port=6379)
 server_name = os.getenv('HOSTNAME')
 
 
