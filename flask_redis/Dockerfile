@@ -1,4 +1,4 @@
-FROM alpine:3.17.2
+FROM alpine
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -14,7 +14,7 @@ LABEL org.opencontainers.image.authors="clemenko@gmail.com" \
       org.opencontainers.image.source=$BUILD_VERSION \
       org.zdocker.compose=$COMPOSE \
       org.zdocker.k8s=$K8SYML
-      
+  
 RUN apk -U upgrade && apk add --no-cache python3 curl py3-pip &&\
     pip3 install --no-cache-dir --upgrade pip &&\
     pip3 install --no-cache-dir flask redis &&\
