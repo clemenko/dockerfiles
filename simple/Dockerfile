@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.18.3
 RUN apk -U upgrade && apk add --no-cache py3-pip curl  &&\
     pip3 install --no-cache-dir --upgrade pip &&\
     pip3 install --no-cache-dir flask redis &&\
