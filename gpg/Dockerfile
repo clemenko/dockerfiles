@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.18.3
 
 LABEL org.opencontainers.image.authors="clemenko@gmail.com" \
       org.opencontainers.image.source="https://github.com/clemenko/dockerfiles/tree/master/gpg" \
