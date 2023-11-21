@@ -1,5 +1,5 @@
 FROM alpine
-#FROM cgr.dev/chainguard/python:latest
+# FROM cgr.dev/chainguard/python:latest-dev
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
