@@ -28,6 +28,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: flask_redis/.
+          context: flask_simple/.
           push: true
           tags: clemenko/flask_simple:latest
