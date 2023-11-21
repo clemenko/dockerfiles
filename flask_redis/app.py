@@ -19,6 +19,10 @@ def hits():
     redis.incr('hits')
     return redis.get('hits')
 
+@app.route('/info')
+def info(server_name=None):
+    return jsonify({'hostname': os.getenv('HOSTNAME'), 'version': version}), 200
+
 @app.route('/')
 def index(server_name=None):
     redis.incr('hits')
